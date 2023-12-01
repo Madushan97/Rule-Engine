@@ -1,7 +1,7 @@
 package com.cba.Rule.Engine.controller;
 
-import com.cba.Rule.Engine.dto.UserResponseDto;
-import com.cba.Rule.Engine.service.UserService;
+import com.cba.Rule.Engine.dto.DataTypesResponseDto;
+import com.cba.Rule.Engine.service.DataTypeService;
 import com.cba.Rule.Engine.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,23 +14,22 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/${application.resource.users}")
-public class UserController {
+@RequestMapping("/${application.resource.dataTypes}")
+public class DataTypeController {
 
-    private final UserService userService;
+    private final DataTypeService dataTypeService;
 
     @GetMapping(path = "/getAll")
     public ResponseEntity<StandardResponse> getAll() {
 
-        List<UserResponseDto> getAllUsers = userService.getAllUsers();
+        List<DataTypesResponseDto> getAllDataTypes = dataTypeService.getAllDataTypes();
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(
                         200,
-                        "get all users successfully",
-                        getAllUsers
+                        "get all Data Types successfully",
+                        getAllDataTypes
                 ),
                 HttpStatus.OK
         );
     }
-
 }

@@ -17,6 +17,7 @@ application:
     userroles: userroles
     permissions: permissions
     rules: rules
+    dataTypes: dataTypes
 
 springdoc:
   api-docs:
