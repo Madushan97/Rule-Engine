@@ -1,5 +1,5 @@
 server:
-  port: 8180
+  port: 7070
   servlet:
     context-path: /rule-engine
 
