@@ -36,7 +36,7 @@ public class PaymentMethods implements java.io.Serializable{
     }
 
     @JsonBackReference
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "datatype_id")
     public DataType getDataType() {
         return dataType;

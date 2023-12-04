@@ -16,7 +16,9 @@ import java.util.List;
 public class DataTypesResponseDto {
 
     private Integer id;
-    private EnumType type;
+    private String type;
     private List<CardLabel> cardLabel;
     private List<PaymentMethods> paymentMethods;
+//    private Date createdAt;
+//    private Date updatedAt;
 }

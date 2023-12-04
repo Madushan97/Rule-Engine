@@ -33,7 +33,7 @@ public class DataType implements java.io.Serializable{
         this.id = id;
     }
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     public String getType() {
         return type;
     }
