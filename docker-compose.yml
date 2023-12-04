@@ -1,0 +1,21 @@
+version: '1'
+
+services:
+  mysql-container:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: madushan
+      MYSQL_DATABASE: haradb_new
+#      MYSQL_USER: root
+      MYSQL_PASSWORD: madushan
+    ports:
+      - "3306:3307"
+
+  springboot-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7070:8181"
+    depends_on:
+      - mysql-container

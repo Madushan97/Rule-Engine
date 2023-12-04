@@ -37,7 +37,7 @@ public class TableStructure {
         this.tableName = tableName;
     }
 
-    @JsonManagedReference
+//    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "tableStructure", cascade = CascadeType.ALL)
     public Set<ColumnList> getColumnList() {
         return columnList;

@@ -1,6 +1,8 @@
 package com.cba.Rule.Engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,8 @@ import java.util.Set;
 @Table(name = "data_type")
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataType implements java.io.Serializable{
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class DataType {
 
     private Integer id;
     private String type;
@@ -24,7 +27,7 @@ public class DataType implements java.io.Serializable{
     private Date updatedAt;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     public Integer getId() {
         return id;
@@ -43,7 +46,7 @@ public class DataType implements java.io.Serializable{
         this.type = type;
     }
 
-    @JsonManagedReference
+//    @JsonManagedReference(value = "cardLabel")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
     public List<CardLabel> getCardLabel() {
         return cardLabel;
@@ -53,7 +56,7 @@ public class DataType implements java.io.Serializable{
         this.cardLabel = cardLabel;
     }
 
-    @JsonManagedReference
+//    @JsonManagedReference(value = "paymentMethod")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
     public List<PaymentMethods> getPaymentMethods() {
         return paymentMethods;
@@ -63,7 +66,7 @@ public class DataType implements java.io.Serializable{
         this.paymentMethods = paymentMethods;
     }
 
-    @JsonManagedReference
+//    @JsonManagedReference(value = "columnList")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
     public List<ColumnList> getColumnList() {
         return columnList;

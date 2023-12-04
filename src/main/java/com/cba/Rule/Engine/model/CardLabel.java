@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "card_label")
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardLabel implements java.io.Serializable{
+public class CardLabel {
 
     private Integer id;
     private String name;

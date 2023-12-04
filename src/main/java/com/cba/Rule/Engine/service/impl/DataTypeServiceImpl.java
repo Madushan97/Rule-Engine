@@ -32,4 +32,16 @@ public class DataTypeServiceImpl implements DataTypeService {
             throw e;
         }
     }
+
+    @Override
+    public DataTypesResponseDto createDataType(DataType dataType) {
+        try {
+            DataType createdDataType = dataTypeRepository.save(dataType);
+            return modelMapper.map(createdDataType, DataTypesResponseDto.class);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+
 }
