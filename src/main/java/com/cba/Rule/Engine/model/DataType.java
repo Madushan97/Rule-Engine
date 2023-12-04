@@ -1,19 +1,24 @@
 package com.cba.Rule.Engine.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "data_type")
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataType {
+public class DataType implements java.io.Serializable{
 
     private Integer id;
-    private EnumType type;
+    private String type;
+    private Set<CardLabel> cardLabel;
+    private Set<PaymentMethods> paymentMethods;
     private Date createdAt;
     private Date updatedAt;
 
@@ -28,14 +33,32 @@ public class DataType {
         this.id = id;
     }
 
-    @Enumerated(EnumType.ORDINAL)
     @Column(name = "type", nullable = false)
-    public EnumType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(EnumType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+    public Set<CardLabel> getCardLabel() {
+        return cardLabel;
+    }
+
+    public void setCardLabel(Set<CardLabel> cardLabel) {
+        this.cardLabel = cardLabel;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+    public Set<PaymentMethods> getPaymentMethods() {
+        return paymentMethods;
+    }
+
+    public void setPaymentMethods(Set<PaymentMethods> paymentMethods) {
+        this.paymentMethods = paymentMethods;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
