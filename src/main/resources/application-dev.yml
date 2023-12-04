@@ -28,6 +28,7 @@ application:
     permissions: permissions
     rules: rules
     dataTypes: dataTypes
+    tables: tables
 
 springdoc:
   api-docs:

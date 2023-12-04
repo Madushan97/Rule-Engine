@@ -17,8 +17,9 @@ public class DataType implements java.io.Serializable{
 
     private Integer id;
     private String type;
-    private Set<CardLabel> cardLabel;
-    private Set<PaymentMethods> paymentMethods;
+    private List<CardLabel> cardLabel;
+    private List<PaymentMethods> paymentMethods;
+    private List<ColumnList> columnList;
     private Date createdAt;
     private Date updatedAt;
 
@@ -44,21 +45,32 @@ public class DataType implements java.io.Serializable{
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public Set<CardLabel> getCardLabel() {
+    public List<CardLabel> getCardLabel() {
         return cardLabel;
     }
 
-    public void setCardLabel(Set<CardLabel> cardLabel) {
+    public void setCardLabel(List<CardLabel> cardLabel) {
         this.cardLabel = cardLabel;
     }
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public Set<PaymentMethods> getPaymentMethods() {
+    public List<PaymentMethods> getPaymentMethods() {
         return paymentMethods;
     }
 
-    public void setPaymentMethods(Set<PaymentMethods> paymentMethods) {
+    public void setPaymentMethods(List<PaymentMethods> paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+    public List<ColumnList> getColumnList() {
+        return columnList;
+    }
+
+    public void setColumnList(List<ColumnList> columnList) {
+        this.columnList = columnList;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
