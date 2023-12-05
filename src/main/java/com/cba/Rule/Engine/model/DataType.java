@@ -21,10 +21,10 @@ public class DataType {
     private Integer id;
     private String type;
     private List<CardLabel> cardLabel;
-    private List<PaymentMethods> paymentMethods;
-    private List<ColumnList> columnList;
-    private Date createdAt;
-    private Date updatedAt;
+//    private List<PaymentMethods> paymentMethods;
+//    private List<ColumnList> columnList;
+//    private Date createdAt;
+//    private Date updatedAt;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,44 +55,44 @@ public class DataType {
     public void setCardLabel(List<CardLabel> cardLabel) {
         this.cardLabel = cardLabel;
     }
-
-//    @JsonManagedReference(value = "paymentMethod")
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public List<PaymentMethods> getPaymentMethods() {
-        return paymentMethods;
-    }
-
-    public void setPaymentMethods(List<PaymentMethods> paymentMethods) {
-        this.paymentMethods = paymentMethods;
-    }
-
-//    @JsonManagedReference(value = "columnList")
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public List<ColumnList> getColumnList() {
-        return columnList;
-    }
-
-    public void setColumnList(List<ColumnList> columnList) {
-        this.columnList = columnList;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, length = 19)
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false, length = 19)
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//
+////    @JsonManagedReference(value = "paymentMethod")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+//    public List<PaymentMethods> getPaymentMethods() {
+//        return paymentMethods;
+//    }
+//
+//    public void setPaymentMethods(List<PaymentMethods> paymentMethods) {
+//        this.paymentMethods = paymentMethods;
+//    }
+//
+////    @JsonManagedReference(value = "columnList")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+//    public List<ColumnList> getColumnList() {
+//        return columnList;
+//    }
+//
+//    public void setColumnList(List<ColumnList> columnList) {
+//        this.columnList = columnList;
+//    }
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "created_at", nullable = false, length = 19)
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "updated_at", nullable = false, length = 19)
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 }
