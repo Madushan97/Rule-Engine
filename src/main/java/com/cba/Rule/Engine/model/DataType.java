@@ -1,6 +1,8 @@
 package com.cba.Rule.Engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,18 +15,19 @@ import java.util.Set;
 @Table(name = "data_type")
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataType implements java.io.Serializable{
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class DataType {
 
     private Integer id;
     private String type;
     private List<CardLabel> cardLabel;
-    private List<PaymentMethods> paymentMethods;
-    private List<ColumnList> columnList;
-    private Date createdAt;
-    private Date updatedAt;
+//    private List<PaymentMethods> paymentMethods;
+//    private List<ColumnList> columnList;
+//    private Date createdAt;
+//    private Date updatedAt;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     public Integer getId() {
         return id;
@@ -43,7 +46,7 @@ public class DataType implements java.io.Serializable{
         this.type = type;
     }
 
-    @JsonManagedReference
+//    @JsonManagedReference(value = "cardLabel")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
     public List<CardLabel> getCardLabel() {
         return cardLabel;
@@ -52,44 +55,44 @@ public class DataType implements java.io.Serializable{
     public void setCardLabel(List<CardLabel> cardLabel) {
         this.cardLabel = cardLabel;
     }
-
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public List<PaymentMethods> getPaymentMethods() {
-        return paymentMethods;
-    }
-
-    public void setPaymentMethods(List<PaymentMethods> paymentMethods) {
-        this.paymentMethods = paymentMethods;
-    }
-
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
-    public List<ColumnList> getColumnList() {
-        return columnList;
-    }
-
-    public void setColumnList(List<ColumnList> columnList) {
-        this.columnList = columnList;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, length = 19)
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false, length = 19)
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//
+////    @JsonManagedReference(value = "paymentMethod")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+//    public List<PaymentMethods> getPaymentMethods() {
+//        return paymentMethods;
+//    }
+//
+//    public void setPaymentMethods(List<PaymentMethods> paymentMethods) {
+//        this.paymentMethods = paymentMethods;
+//    }
+//
+////    @JsonManagedReference(value = "columnList")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataType", cascade = CascadeType.ALL)
+//    public List<ColumnList> getColumnList() {
+//        return columnList;
+//    }
+//
+//    public void setColumnList(List<ColumnList> columnList) {
+//        this.columnList = columnList;
+//    }
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "created_at", nullable = false, length = 19)
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "updated_at", nullable = false, length = 19)
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 }

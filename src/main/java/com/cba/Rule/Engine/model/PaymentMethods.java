@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "payment_method")
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentMethods implements java.io.Serializable{
+public class PaymentMethods {
 
     private Integer id;
     private String name;
