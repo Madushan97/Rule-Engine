@@ -1,6 +1,5 @@
 
-FROM openjdk:17-oracle
+FROM adoptopenjdk/openjdk17:alpine
 ADD target/rule-engine-docker.jar rule-engine-docker.jar
-#EXPOSE 8180
 ENTRYPOINT ["java", "-jar", "/rule-engine-docker.jar"]
 
