@@ -1,7 +1,11 @@
 package com.cba.Rule.Engine.service.impl;
 
 import com.cba.Rule.Engine.dto.DataTypesResponseDto;
+import com.cba.Rule.Engine.dto.requestDto.DataTypeRequestDto;
+import com.cba.Rule.Engine.model.CardLabel;
+import com.cba.Rule.Engine.model.ColumnList;
 import com.cba.Rule.Engine.model.DataType;
+import com.cba.Rule.Engine.model.PaymentMethods;
 import com.cba.Rule.Engine.repository.DataTypeRepository;
 import com.cba.Rule.Engine.service.DataTypeService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +24,6 @@ public class DataTypeServiceImpl implements DataTypeService {
 
     @Override
     public List<DataTypesResponseDto> getAllDataTypes() {
-        try {
             List<DataType> dataTypeList = dataTypeRepository.findAll();
             List<DataTypesResponseDto> dataTypesResponseDtos = new ArrayList<>();
             for(DataType dataType : dataTypeList) {
@@ -28,20 +31,16 @@ public class DataTypeServiceImpl implements DataTypeService {
                 dataTypesResponseDtos.add(dataTypesResponseDto);
             }
             return dataTypesResponseDtos;
-        } catch (Exception e) {
-            throw e;
-        }
     }
 
     @Override
     public DataTypesResponseDto createDataType(DataType dataType) {
-        try {
-            DataType createdDataType = dataTypeRepository.save(dataType);
-            return modelMapper.map(createdDataType, DataTypesResponseDto.class);
-        } catch (Exception e) {
-            throw e;
-        }
+            DataType dataType1 = new DataType();
+            dataType1.setType(dataType.getType());
+            dataType1.setCardLabel(dataType.getCardLabel());
+            dataType1.setPaymentMethods(dataType.getPaymentMethods());
+            dataType1.setColumnList(dataType.getColumnList());
+            dataTypeRepository.save(dataType1);
+            return modelMapper.map(dataType1, DataTypesResponseDto.class);
     }
-
-
 }
