@@ -20,7 +20,7 @@ public class RuleController {
     private final RuleService ruleService;
 
     @PostMapping(path = "/create")
-    public ResponseEntity<StandardResponse> create(@RequestBody RuleRequestDto ruleRequestDto) {
+    public ResponseEntity<StandardResponse> create(@RequestBody RuleRequestDto ruleRequestDto) throws Exception{
 
         RuleResponseDto createRule = ruleService.createRule(ruleRequestDto);
         return new ResponseEntity<StandardResponse>(
@@ -34,7 +34,7 @@ public class RuleController {
     }
 
     @GetMapping(path = "/getAll")
-    public ResponseEntity<StandardResponse> getAll() {
+    public ResponseEntity<StandardResponse> getAll() throws Exception{
 
         List<RuleResponseDto> getAllRules = ruleService.getAllRules();
         return new ResponseEntity<StandardResponse>(
@@ -42,6 +42,20 @@ public class RuleController {
                         HttpStatus.OK.value(),
                         "get all rules successfully",
                         getAllRules
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<StandardResponse> delete(@PathVariable(value = "id") int id) throws Exception{
+
+        String deleteRule = ruleService.deleteRule(id);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(
+                        HttpStatus.OK.value(),
+                        "delete successfully",
+                        deleteRule
                 ),
                 HttpStatus.OK
         );

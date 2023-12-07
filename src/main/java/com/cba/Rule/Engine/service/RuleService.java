@@ -12,4 +12,5 @@ public interface RuleService {
 
     List<RuleResponseDto> getAllRules();
 
+    String deleteRule(int id);
 }

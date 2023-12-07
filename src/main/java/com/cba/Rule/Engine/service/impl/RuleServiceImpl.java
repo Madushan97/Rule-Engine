@@ -4,9 +4,9 @@ import com.cba.Rule.Engine.dto.RuleResponseDto;
 import com.cba.Rule.Engine.dto.requestDto.OperatorRequestDto;
 import com.cba.Rule.Engine.dto.requestDto.RuleConfigurationRequestDto;
 import com.cba.Rule.Engine.dto.requestDto.RuleRequestDto;
-import com.cba.Rule.Engine.model.Operator;
-import com.cba.Rule.Engine.model.Rule;
-import com.cba.Rule.Engine.model.RuleConfiguration;
+import com.cba.Rule.Engine.model.*;
+import com.cba.Rule.Engine.repository.OperatorRepository;
+import com.cba.Rule.Engine.repository.RuleConfigRepository;
 import com.cba.Rule.Engine.repository.RuleRepository;
 import com.cba.Rule.Engine.service.RuleService;
 import jakarta.persistence.EntityManager;
@@ -25,6 +25,8 @@ public class RuleServiceImpl implements RuleService {
     private final ModelMapper modelMapper;
     private final RuleRepository ruleRepository;
     private final EntityManager entityManager;
+    private final RuleConfigRepository ruleConfigRepository;
+    private final OperatorRepository operatorRepository;
 
     @Override
     public RuleResponseDto createRule(@RequestBody RuleRequestDto ruleRequestDto) {
@@ -40,12 +42,11 @@ public class RuleServiceImpl implements RuleService {
             if (ruleConfig == null) {
                 // Create a new RuleConfiguration if not found
                 ruleConfig = new RuleConfiguration();
-//                TODO : other attributes
-//                ruleConfig.setTableId(configDto.getTableId());
-//                ruleConfig.setColumnId();
-//                ruleConfig.setAction();
-//                ruleConfig.setValue();
-//                ruleConfig.setRule();
+                ruleConfig.setTableId(modelMapper.map(configDto.getTableId(), TableStructure.class));
+                ruleConfig.setColumnId(modelMapper.map(configDto.getColumnId(), ColumnList.class));
+                ruleConfig.setAction(configDto.getAction());
+                ruleConfig.setValue(configDto.getValue());
+                ruleConfig.setRule(modelMapper.map(configDto.getRule(), Rule.class));
             }
             ruleConfigList.add(ruleConfig);
         }
@@ -58,16 +59,17 @@ public class RuleServiceImpl implements RuleService {
             if (operator == null) {
                 // Create a new Operator if not found
                 operator = new Operator();
-//                TODO : other attributes
+                operator.setId(operatorDto.getId());
+                operator.setOperator(operatorDto.getOperator());
+                operator.setRule(modelMapper.map(operatorDto.getRuleRequestDto(), Rule.class));
             }
             operatorList.add(operator);
         }
         rule.setOperator(operatorList);
 
-        ruleRepository.save(rule);
-        return null;
+        Rule savedRule = ruleRepository.save(rule);
+        return modelMapper.map(savedRule, RuleResponseDto.class);
     }
-
 
     @Override
     public List<RuleResponseDto> getAllRules() {
@@ -78,5 +80,11 @@ public class RuleServiceImpl implements RuleService {
             ruleResponseDtoList.add(ruleResponseDto);
         }
         return ruleResponseDtoList;
+    }
+
+    @Override
+    public String deleteRule(int id) {
+        ruleRepository.deleteById(id);
+        return "Delete Successfully";
     }
 }
