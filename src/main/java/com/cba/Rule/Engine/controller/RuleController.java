@@ -1,6 +1,7 @@
 package com.cba.Rule.Engine.controller;
 
 import com.cba.Rule.Engine.dto.RuleResponseDto;
+import com.cba.Rule.Engine.dto.requestDto.RuleRequestDto;
 import com.cba.Rule.Engine.model.Rule;
 import com.cba.Rule.Engine.service.RuleService;
 import com.cba.Rule.Engine.util.StandardResponse;
@@ -19,9 +20,9 @@ public class RuleController {
     private final RuleService ruleService;
 
     @PostMapping(path = "/create")
-    public ResponseEntity<StandardResponse> create(@RequestBody Rule rule) {
+    public ResponseEntity<StandardResponse> create(@RequestBody RuleRequestDto ruleRequestDto) {
 
-        RuleResponseDto createRule = ruleService.createRule(rule);
+        RuleResponseDto createRule = ruleService.createRule(ruleRequestDto);
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(
                         HttpStatus.CREATED.value(),
