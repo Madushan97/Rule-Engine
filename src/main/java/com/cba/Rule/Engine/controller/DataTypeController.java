@@ -1,6 +1,7 @@
 package com.cba.Rule.Engine.controller;
 
 import com.cba.Rule.Engine.dto.DataTypesResponseDto;
+import com.cba.Rule.Engine.dto.requestDto.DataTypeRequestDto;
 import com.cba.Rule.Engine.model.DataType;
 import com.cba.Rule.Engine.service.DataTypeService;
 import com.cba.Rule.Engine.util.StandardResponse;
@@ -33,7 +34,7 @@ public class DataTypeController {
         );
     }
 
-    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/create")
     public ResponseEntity<StandardResponse> create(@RequestBody DataType dataType) {
 
         DataTypesResponseDto createDataType = dataTypeService.createDataType(dataType);
