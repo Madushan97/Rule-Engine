@@ -73,4 +73,5 @@ public class Rule {
     public void setOperator(List<Operator> operator) {
         this.operator = operator;
     }
+
 }

@@ -5,6 +5,7 @@ import com.cba.Rule.Engine.dto.requestDto.RuleRequestDto;
 import com.cba.Rule.Engine.model.Rule;
 import com.cba.Rule.Engine.service.RuleService;
 import com.cba.Rule.Engine.util.StandardResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,20 @@ public class RuleController {
                         HttpStatus.OK.value(),
                         "delete successfully",
                         deleteRule
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping(path = "/update/{id}")
+    public ResponseEntity<StandardResponse> update(@PathVariable(value = "id") int id, @RequestBody RuleRequestDto ruleRequestDto) throws Exception {
+
+        RuleResponseDto updateRule = ruleService.updateRule(id, ruleRequestDto);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(
+                        HttpStatus.OK.value(),
+                        "update successfully",
+                        updateRule
                 ),
                 HttpStatus.OK
         );

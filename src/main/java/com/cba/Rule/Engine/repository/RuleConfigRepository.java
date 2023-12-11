@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RuleConfigRepository extends JpaRepository<RuleConfiguration, Integer> {
 
+    void deleteByRuleId(Integer id);
 }

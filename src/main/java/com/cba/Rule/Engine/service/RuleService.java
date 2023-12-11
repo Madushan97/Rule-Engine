@@ -13,4 +13,6 @@ public interface RuleService {
     List<RuleResponseDto> getAllRules();
 
     String deleteRule(int id);
+
+    RuleResponseDto updateRule(int id, RuleRequestDto ruleRequestDto);
 }

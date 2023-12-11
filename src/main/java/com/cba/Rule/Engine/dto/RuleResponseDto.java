@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public class RuleResponseDto {
 
-//    private Integer id;
+    private Integer id;
     private String ruleName;
     private String triggerType;
     private String ruleDescription;

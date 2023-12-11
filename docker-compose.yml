@@ -4,7 +4,7 @@ services:
   mysql-container:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: madushan
       MYSQL_DATABASE: haradb_new
     ports:
       - "3307:3306"
@@ -14,10 +14,10 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8181:8080"
+      - "9090:8080"
     depends_on:
       - mysql-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/haradb_new
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3307/haradb_new
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_PASSWORD: madushan

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OperatorRepository extends JpaRepository<Operator, Integer> {
+
+    void deleteByRuleId(Integer id);
 }

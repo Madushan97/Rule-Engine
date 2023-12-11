@@ -4,6 +4,7 @@ import com.cba.Rule.Engine.dto.RuleResponseDto;
 import com.cba.Rule.Engine.dto.requestDto.OperatorRequestDto;
 import com.cba.Rule.Engine.dto.requestDto.RuleConfigurationRequestDto;
 import com.cba.Rule.Engine.dto.requestDto.RuleRequestDto;
+import com.cba.Rule.Engine.exception.NotFoundException;
 import com.cba.Rule.Engine.model.*;
 import com.cba.Rule.Engine.repository.OperatorRepository;
 import com.cba.Rule.Engine.repository.RuleConfigRepository;
@@ -24,7 +25,6 @@ public class RuleServiceImpl implements RuleService {
 
     private final ModelMapper modelMapper;
     private final RuleRepository ruleRepository;
-    private final EntityManager entityManager;
     private final RuleConfigRepository ruleConfigRepository;
     private final OperatorRepository operatorRepository;
 
@@ -35,34 +35,18 @@ public class RuleServiceImpl implements RuleService {
         rule.setTriggerType(ruleRequestDto.getTriggerType());
         rule.setRuleDescription(ruleRequestDto.getRuleDescription());
 
-        // Fetch or create RuleConfig entities
+        // Create RuleConfig entities
         List<RuleConfiguration> ruleConfigList = new ArrayList<>();
         for (RuleConfigurationRequestDto configDto : ruleRequestDto.getRuleConfig()) {
-            RuleConfiguration ruleConfig = entityManager.find(RuleConfiguration.class, configDto.getId());
-            if (ruleConfig == null) {
-                // Create a new RuleConfiguration if not found
-                ruleConfig = new RuleConfiguration();
-                ruleConfig.setTableId(modelMapper.map(configDto.getTableId(), TableStructure.class));
-                ruleConfig.setColumnId(modelMapper.map(configDto.getColumnId(), ColumnList.class));
-                ruleConfig.setAction(configDto.getAction());
-                ruleConfig.setValue(configDto.getValue());
-                ruleConfig.setRule(modelMapper.map(configDto.getRule(), Rule.class));
-            }
+            RuleConfiguration ruleConfig = createOrUpdateRuleConfiguration(configDto, rule);
             ruleConfigList.add(ruleConfig);
         }
         rule.setRuleConfig(ruleConfigList);
 
-        // Fetch or create Operator entities
+        // Create Operator entities
         List<Operator> operatorList = new ArrayList<>();
         for (OperatorRequestDto operatorDto : ruleRequestDto.getOperator()) {
-            Operator operator = entityManager.find(Operator.class, operatorDto.getId());
-            if (operator == null) {
-                // Create a new Operator if not found
-                operator = new Operator();
-                operator.setId(operatorDto.getId());
-                operator.setOperator(operatorDto.getOperator());
-                operator.setRule(modelMapper.map(operatorDto.getRuleRequestDto(), Rule.class));
-            }
+            Operator operator = createOrUpdateOperator(operatorDto, rule);
             operatorList.add(operator);
         }
         rule.setOperator(operatorList);
@@ -70,6 +54,40 @@ public class RuleServiceImpl implements RuleService {
         Rule savedRule = ruleRepository.save(rule);
         return modelMapper.map(savedRule, RuleResponseDto.class);
     }
+
+    private RuleConfiguration createOrUpdateRuleConfiguration(RuleConfigurationRequestDto configDto, Rule rule) {
+        RuleConfiguration ruleConfig = new RuleConfiguration();
+        ruleConfig.setId(configDto.getId());
+        ruleConfig.setAction(configDto.getAction());
+        ruleConfig.setValue(configDto.getValue());
+
+        // Save the Rule entity if it's not saved yet
+        if (rule.getId() == null) {
+            rule = ruleRepository.save(rule);
+        }
+
+        ruleConfig.setRule(rule);
+
+        if (configDto.getTableId() != null) {
+            ruleConfig.setTableId(modelMapper.map(configDto.getTableId(), TableStructure.class));
+        }
+
+        if (configDto.getColumnId() != null) {
+            ruleConfig.setColumnId(modelMapper.map(configDto.getColumnId(), ColumnList.class));
+        }
+        return ruleConfigRepository.save(ruleConfig);
+    }
+
+
+    private Operator createOrUpdateOperator(OperatorRequestDto operatorDto, Rule rule) {
+        Operator operator = new Operator();
+        operator.setId(operatorDto.getId());
+        operator.setOperator(operatorDto.getOperator());
+        operator.setRule(rule);
+
+        return operatorRepository.save(operator);
+    }
+
 
     @Override
     public List<RuleResponseDto> getAllRules() {
@@ -86,5 +104,84 @@ public class RuleServiceImpl implements RuleService {
     public String deleteRule(int id) {
         ruleRepository.deleteById(id);
         return "Delete Successfully";
+    }
+
+    @Override
+    public RuleResponseDto updateRule(int id, RuleRequestDto ruleRequestDto) {
+
+        Rule rule = ruleRepository.findById(id).orElseThrow(() -> new NotFoundException("Rule not found with id: " + id));
+
+        // Update fields with the new data
+        rule.setRuleName(ruleRequestDto.getRuleName());
+        rule.setTriggerType(ruleRequestDto.getTriggerType());
+        rule.setRuleDescription(ruleRequestDto.getRuleDescription());
+
+        updateRuleConfigurations(ruleRequestDto.getRuleConfig(), rule);
+        updateOperators(ruleRequestDto.getOperator(), rule);
+
+        Rule updatedRule = ruleRepository.save(rule);
+        return modelMapper.map(updatedRule, RuleResponseDto.class);
+    }
+
+    private void updateRuleConfigurations(List<RuleConfigurationRequestDto> ruleConfigDtos, Rule rule) {
+
+        List<RuleConfiguration> existingRuleConfigs = rule.getRuleConfig();
+
+        for (RuleConfigurationRequestDto configDto : ruleConfigDtos) {
+            RuleConfiguration existingRuleConfig = findExistingRuleConfig(configDto, existingRuleConfigs);
+
+            if (existingRuleConfig != null) {
+                updateExistingRuleConfig(existingRuleConfig, configDto);
+            } else {
+                RuleConfiguration newRuleConfig = createOrUpdateRuleConfiguration(configDto, rule);
+                existingRuleConfigs.add(newRuleConfig);
+            }
+        }
+    }
+
+    private RuleConfiguration findExistingRuleConfig(RuleConfigurationRequestDto configDto, List<RuleConfiguration> existingRuleConfigs) {
+        return existingRuleConfigs.stream()
+                .filter(ruleConfig -> ruleConfig.getId().equals(configDto.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void updateExistingRuleConfig(RuleConfiguration existingRuleConfig, RuleConfigurationRequestDto configDto) {
+        existingRuleConfig.setRule(modelMapper.map(configDto.getRule(), Rule.class));
+        existingRuleConfig.setAction(configDto.getAction());
+        existingRuleConfig.setColumnId(modelMapper.map(configDto.getColumnId(), ColumnList.class));
+        existingRuleConfig.setValue(configDto.getValue());
+        existingRuleConfig.setTableId(modelMapper.map(configDto.getTableId(), TableStructure.class));
+    }
+
+
+    private void updateOperators(List<OperatorRequestDto> operatorDtos, Rule rule) {
+        // Get the existing operators
+        List<Operator> existingOperators = rule.getOperator();
+
+        // Update existing operators and add new ones
+        for (OperatorRequestDto operatorDto : operatorDtos) {
+            Operator existingOperator = findExistingOperator(operatorDto, existingOperators);
+
+            if (existingOperator != null) {
+                updateExistingOperator(existingOperator, operatorDto);
+            } else {
+                Operator newOperator = createOrUpdateOperator(operatorDto, rule);
+                existingOperators.add(newOperator);
+            }
+        }
+    }
+
+    private Operator findExistingOperator(OperatorRequestDto operatorDto, List<Operator> existingOperators) {
+        return existingOperators.stream()
+                .filter(operator -> operator.getId().equals(operatorDto.getId()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void updateExistingOperator(Operator existingOperator, OperatorRequestDto operatorDto) {
+        existingOperator.setOperator(operatorDto.getOperator());
+//        existingOperator.setRule(operatorDto.getRuleRequestDto());
+        existingOperator.setId(operatorDto.getId());
     }
 }
