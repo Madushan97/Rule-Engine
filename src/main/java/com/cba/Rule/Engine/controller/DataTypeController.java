@@ -35,9 +35,9 @@ public class DataTypeController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<StandardResponse> create(@RequestBody DataType dataType) {
+    public ResponseEntity<StandardResponse> create(@RequestBody DataTypeRequestDto dataTypeRequestDto) {
 
-        DataTypesResponseDto createDataType = dataTypeService.createDataType(dataType);
+        DataTypesResponseDto createDataType = dataTypeService.createDataType(dataTypeRequestDto);
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(
                         HttpStatus.CREATED.value(),

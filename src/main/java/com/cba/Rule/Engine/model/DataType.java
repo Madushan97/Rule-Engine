@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +26,9 @@ public class DataType {
     private List<CardLabel> cardLabel;
     private List<PaymentMethods> paymentMethods;
     private List<ColumnList> columnList;
+    @CreatedDate
     private Date createdAt;
+    @LastModifiedDate
     private Date updatedAt;
 
     @Id
@@ -76,6 +81,7 @@ public class DataType {
         this.columnList = columnList;
     }
 
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, length = 19)
     public Date getCreatedAt() {
@@ -85,6 +91,7 @@ public class DataType {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false, length = 19)

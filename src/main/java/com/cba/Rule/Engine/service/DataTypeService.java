@@ -11,5 +11,5 @@ public interface DataTypeService {
 
     List<DataTypesResponseDto> getAllDataTypes();
 
-    DataTypesResponseDto createDataType(DataType dataType);
+    DataTypesResponseDto createDataType(DataTypeRequestDto dataTypeRequestDto);
 }
