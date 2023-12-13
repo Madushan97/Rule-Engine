@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  mysql-container:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: haradb_new
-    ports:
-      - "3307:3306"
+#  mysql-container:
+#    image: mysql:latest
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: haradb_new
+#    ports:
+#      - "3307:3306"
 
   springboot-container:
     build:
@@ -18,6 +18,6 @@ services:
     depends_on:
       - mysql-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3307/haradb_new
+      SPRING_DATASOURCE_URL: jdbc:mysql://123.231.95.112:3306/wireme_rule_db_test?serverTimezone=UTC&cachePrepStmts=true&useServerPrepStmts=true&rewriteBatchedStatements=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_PASSWORD: Cbacba123#
